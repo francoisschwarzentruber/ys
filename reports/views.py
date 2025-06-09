@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.template import loader
-from .models import Member, Report
+from .models import Member, Report, Review
 from django.shortcuts import get_object_or_404
 from django.http import FileResponse
 
@@ -51,7 +51,7 @@ def download_report(request, id):
         return redirect("")
     
     report = Report.objects.filter(id=id).get()
-    response = FileResponse(open(report.report.path, 'rb'))
+    response = FileResponse(open(report.pdf.path, 'rb'))
     response['Content-Type'] = 'application/pdf'
     response['Content-Disposition'] = f'attachment; filename="{report.pdf}"'
     return response
@@ -78,19 +78,22 @@ def submit_report(request):
   
     context['user'] = request.user
     
+    
+    
+    report = Report.objects.filter(author=user).first()
+
+    
     if request.POST:
         form = SubmitReportForm(request.POST, request.FILES)
         if form.is_valid():
             filename = 'reportspdf/'+str(user.id)+'.pdf'
             
-            report = Report.objects.filter(author=user).first()
-            
             if report == None:
                 report = Report(
-                    author=user,
-                    title=form.cleaned_data['title'],
+                    author=user
                 )
                 
+            report.title = form.cleaned_data['title']
             report.save()
             report.pdf = 'reportspdf/'+str(report.id)+'.pdf'
             report.save()
@@ -100,32 +103,50 @@ def submit_report(request):
             
         return render( request, "submit_report_thankyou.html", context)
     else:
-        form = SubmitReportForm()
+        form = SubmitReportForm(initial=report)
         context['form'] = form
         return render( request, "submit_report.html", context)
   
   
   
-def submit_review(request, id_report):
-  
+def submit_review(request, id):
+    
     user = request.user
     context = {}
     context['user'] = user
     
+    
     if(user.is_anonymous):
         return redirect("")
     
-    
     if not is_reviewer(user):
        return redirect("")
+   
+    if not Report.objects.filter(id=id).exists():
+        return redirect("")
+    
+    report = Report.objects.get(id=id)
+    
+    context['report'] = report
+    
+    review = Review.objects.filter(reviewer=user, report=report).first()
+
     
     if request.POST:
         form = SubmitReviewForm(request.POST, request.FILES)
         if form.is_valid():
-            pass
             
-        return render( request, "submit_review_thankyou.html", context)
-    else:
-        form = SubmitReviewForm()
-        context['form'] = form
-        return render( request, "submit_review.html", context)
+            if review == None:
+                review = Review(
+                    report = report,
+                    reviewer = user,
+                )
+            review.review = form.cleaned_data['review']
+                
+            review.save()
+            
+            context['saved'] = True
+        
+    form = SubmitReviewForm(initial={"review": review.review})
+    context['form'] = form
+    return render( request, "submit_review.html", context)

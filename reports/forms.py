@@ -5,6 +5,6 @@ class SubmitReportForm(forms.Form):
     pdf = forms.FileField()
     
 class SubmitReviewForm(forms.Form):
-    review = forms.Textarea()
+    review = forms.CharField(widget=forms.Textarea)
     
     

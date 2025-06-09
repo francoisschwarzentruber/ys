@@ -1,9 +1,28 @@
-<h1>Submit your review</h1>
+<h1>Enter review</h1>
 
-Thank you {{user}} for having accepted to provide the review for internship reports.
+Thank you {{user}}.
+Please enter the review for the following report:
+
+
+<ul>
+    <li>
+        {{report.author}} {{report.title}}
+        <a href="{% url  'download_report' report.id %}">Download</a>
+    </li>
+</ul>
 
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Submit">
 </form>
+
+
+{% if saved %}
+
+
+<div id="saved">saved!</div>
+<script>
+    setTimeout(() => saved.hidden = true, 1000);
+</script>
+{% endif %}

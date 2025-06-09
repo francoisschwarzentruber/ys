@@ -14,6 +14,7 @@
         <li>{{x.id}} {{ x.author }}.
             {{ x.title }}
                         <a href="{% url  'download_report' x.id %}">Download</a>
+                         <a href="{% url  'submit_review' x.id %}">Enter review</a>
 
         </li>
         {% endfor %}
