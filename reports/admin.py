@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import Member, Submission
+from .models import Member, Report
 
 # Register your models here.
 admin.site.register(Member)
-admin.site.register(Submission)
+admin.site.register(Report)

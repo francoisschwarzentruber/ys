@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <h1>Reports</h1>
+
+    Thank you for reviewing some reports. Here is the list of the reports.
+
+    <a href="logout">Log out</a>
+
+    <ul>
+        {% for x in reports %}
+        <li>{{x.id}} {{ x.author }}.
+            {{ x.title }}
+                        <a href="{% url  'download_report' x.id %}">Download</a>
+
+        </li>
+        {% endfor %}
+    </ul>
+
+</body>
+
+</html>
