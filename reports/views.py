@@ -8,6 +8,9 @@ from django.shortcuts import render
 from .forms import SubmitReportForm
 from .forms import SubmitReviewForm
 from django.shortcuts import redirect
+import datetime
+
+DEADLINE = datetime.datetime(2025, 8, 18, 0, 0)
 
 
 
@@ -82,6 +85,13 @@ def submit_report(request):
     
     report = Report.objects.filter(author=user).first()
 
+    context['report'] = report
+    context['DEADLINE'] = DEADLINE
+    
+    toolate = datetime.datetime.now() > DEADLINE
+    
+    if toolate:
+        return render( request, "toolate.html", context)
     
     if request.POST:
         form = SubmitReportForm(request.POST, request.FILES)
@@ -103,7 +113,7 @@ def submit_report(request):
             
         return render( request, "submit_report_thankyou.html", context)
     else:
-        form = SubmitReportForm(initial=report)
+        form = SubmitReportForm(initial={"title": report.title} if report is not None else None)
         context['form'] = form
         return render( request, "submit_report.html", context)
   
@@ -147,6 +157,6 @@ def submit_review(request, id):
             
             context['saved'] = True
         
-    form = SubmitReviewForm(initial={"review": review.review})
+    form = SubmitReviewForm(initial={"review": review.review} if review is not None else None)
     context['form'] = form
     return render( request, "submit_review.html", context)

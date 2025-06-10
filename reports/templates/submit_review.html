@@ -1,4 +1,10 @@
-<h1>Enter review</h1>
+{% extends "base.html" %}
+
+{% block title %}
+Enter review
+{% endblock %}
+
+{% block content %}
 
 Thank you {{user}}.
 Please enter the review for the following report:
@@ -7,7 +13,7 @@ Please enter the review for the following report:
 <ul>
     <li>
         {{report.author}} {{report.title}}
-        <a href="{% url  'download_report' report.id %}">Download</a>
+        <a class="button" href="{% url  'download_report' report.id %}">📥 Download</a>
     </li>
 </ul>
 
@@ -19,10 +25,10 @@ Please enter the review for the following report:
 
 
 {% if saved %}
-
-
 <div id="saved">saved!</div>
 <script>
     setTimeout(() => saved.hidden = true, 1000);
 </script>
 {% endif %}
+
+{% endblock %}

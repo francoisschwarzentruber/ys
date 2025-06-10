@@ -1,0 +1,23 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+</head>
+
+<body>
+    <div class="userinfo">
+    {{user}} <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button class="logout" type="submit">Logout</button>
+    </form>
+    </div>
+
+
+    <h1>{% block title %}{% endblock %}</h1>
+
+    {% block content %} {% endblock %}
+
+</body>

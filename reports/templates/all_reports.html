@@ -1,25 +1,23 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<body>
+{% block title %}
+List of internship reports
+{% endblock %}
 
-    <h1>Reports</h1>
+{% block content %}
+Thank you for reviewing some reports.
 
-    Thank you for reviewing some reports. Here is the list of the reports.
 
-    <a href="logout">Log out</a>
 
-    <ul>
-        {% for x in reports %}
-        <li>{{x.id}} {{ x.author }}.
-            {{ x.title }}
-                        <a href="{% url  'download_report' x.id %}">Download</a>
-                         <a href="{% url  'submit_review' x.id %}">Enter review</a>
+<ul>
+    {% for x in reports %}
+    <li>{{x.id}} {{x.author.first_name}} {{x.author.last_name}}.
+        {{ x.title }}
+        <a class=button href="{% url  'download_report' x.id %}">📥 Download</a>
+        <a class=button href="{% url  'submit_review' x.id %}">✎ Enter review</a>
 
-        </li>
-        {% endfor %}
-    </ul>
+    </li>
+    {% endfor %}
+</ul>
 
-</body>
-
-</html>
+{% endblock %}

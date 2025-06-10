@@ -1,3 +1,9 @@
-<h1>Thank you {{user}} for your report submission.</h1>
+{% extends "base.html" %}
 
+{% block title %}
+Thank you {{user}} for your report submission.
+{% endblock %}
+
+{% block content %}
 Your report will be evaluated. You can update your report until the deadline, by resubmitting it.
+{% endblock %}

@@ -1,11 +1,25 @@
-<h1>Submit your report</h1>
+{% extends "base.html" %}
 
-{{user}} <a href="logout">Log out</a>
+{% block title %}
+Submit your report
+{% endblock %}
 
+{% block content %}
 
+The deadline is {{DEADLINE}}.
+
+{% if report != None %}
+You already submitted your report. The last version is:  <a class=button href="{% url  'download_report' report.id %}">📥 Download</a>
+<br/>
+You can resubmit a new version here.
+{% endif %}
 
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Submit">
 </form>
+
+{% endblock %}
+
+
